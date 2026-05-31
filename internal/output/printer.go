@@ -1,8 +1,12 @@
-package internal
+package output
 
-import "fmt"
+import (
+	"fmt"
+	"gogrep/internal/config"
+	"gogrep/internal/model"
+)
 
-func PrintResults(results Match, opts Options) {
+func PrintResults(results model.Match, opts config.Options) {
 	if opts.DisplayNum {
 		fmt.Printf("%d: %s\n", results.Line, results.Text)
 	} else {

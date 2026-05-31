@@ -1,15 +1,15 @@
-package internal
+package cli
 
 import (
 	"errors"
-	"fmt"
+	"gogrep/internal/config"
 	"os"
 )
 
-func GetArgs() (Options, string, string, error) {
+func GetArgs() (config.Options, string, string, error) {
 
 	allArgs := os.Args
-	var opts Options
+	var opts config.Options
 
 	if len(allArgs) < 3 {
 		return opts, "", "", errors.New("Not enough arguements")
@@ -30,9 +30,17 @@ func GetArgs() (Options, string, string, error) {
 	case "-c":
 		opts.MatchCount = true
 
+	case "-E":
+		opts.Regex = true
+
+	case "-w":
+		opts.WordMatch = true
+
+	case "-x":
+		opts.LineMatch = true
+
 	default:
-		fmt.Println("unknown flag")
-		os.Exit(1)
+		return opts, "", "", errors.New("unknown flag")
 
 	}
 
@@ -40,6 +48,6 @@ func GetArgs() (Options, string, string, error) {
 		return opts, allArgs[2], allArgs[3], nil
 	}
 
-	return opts, "", "", nil
+	return opts, "", "", errors.New("Only 4 args are supported")
 
 }
