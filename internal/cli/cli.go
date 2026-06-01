@@ -2,52 +2,29 @@ package cli
 
 import (
 	"errors"
+	"flag"
 	"gogrep/internal/config"
-	"os"
 )
 
 func GetArgs() (config.Options, string, string, error) {
-
-	allArgs := os.Args
 	var opts config.Options
 
-	if len(allArgs) < 3 {
-		return opts, "", "", errors.New("Not enough arguements")
+	flag.BoolVar(&opts.IgnoreCase, "i", false, "ignore case")
+	flag.BoolVar(&opts.DisplayNum, "n", false, "display line number")
+	flag.BoolVar(&opts.Invert, "v", false, "invert search")
+	flag.BoolVar(&opts.MatchCount, "c", false, "match lines")
+	flag.BoolVar(&opts.LineMatch, "x", false, "entire line match")
+	flag.BoolVar(&opts.Regex, "E", false, "regex match")
+	flag.BoolVar(&opts.WordMatch, "w", false, "entire word match")
+
+	flag.Parse()
+
+	args := flag.Args()
+	if len(args) != 2 {
+		return opts, "", "", errors.New("usage: gogrep [flags] pattern filename")
 	}
+	pattern := args[0]
+	filename := args[1]
 
-	if len(allArgs) == 3 {
-		return opts, allArgs[1], allArgs[2], nil
-	}
-
-	flag := allArgs[1]
-	switch flag {
-	case "-i":
-		opts.IgnoreCase = true
-
-	case "-v":
-		opts.Invert = true
-
-	case "-c":
-		opts.MatchCount = true
-
-	case "-E":
-		opts.Regex = true
-
-	case "-w":
-		opts.WordMatch = true
-
-	case "-x":
-		opts.LineMatch = true
-
-	default:
-		return opts, "", "", errors.New("unknown flag")
-
-	}
-
-	if len(allArgs) == 4 {
-		return opts, allArgs[2], allArgs[3], nil
-	}
-
-	return opts, "", "", errors.New("Only 4 args are supported")
-
+	return opts, pattern, filename, nil
 }

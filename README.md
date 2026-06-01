@@ -1,2 +1,2 @@
 # gogrep
-Built a high-performance grep-like search engine in Go capable of parallel scanning across large repositories, supporting regex search, ignore-rule parsing, structured JSON output, and multi-pattern matching via Aho-Corasick; benchmarked against GNU grep and ripgrep.
+Built a grep-like CLI tool in Go capable of recursively searching large directory trees using concurrent worker pools. Implemented goroutine-based file processing, channel-driven pipelines, context-based cancellation, configurable file exclusion rules, and benchmark-driven performance evaluation.
